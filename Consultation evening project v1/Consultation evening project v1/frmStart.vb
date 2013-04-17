@@ -7,9 +7,9 @@
 
         Nstaff = FileLen("staff.dat") / Len(Staff)
         NStaffAv = FileLen("staffav.dat") / Len(StaffAv)
-        Nstudents = FileLen("students.dat") / Len(student)
+        Nstudents = FileLen("student.dat") / Len(student)
         NStudAv = FileLen("studav.dat") / Len(StudAv)
-        NAppointment = FileLen("appointment.dat") / Len(Appointment)
+        NAppointment = FileLen("appointments.dat") / Len(Appointment)
         NDay = FileLen("day.dat") / Len(Day)
         Nlesson = FileLen("lesson.dat") / Len(Lesson)
 
