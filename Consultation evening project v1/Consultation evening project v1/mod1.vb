@@ -88,6 +88,7 @@
     'student availability variables
 
     Public StudAv As StudAvRec = Nothing
+    Public studav2 As StudAvRec = Nothing
     Public NStudAv As Integer = -1
 
     'staff availablitiy variables
@@ -458,14 +459,8 @@
         'import misc.dat data
         Dim filenum As Integer = FreeFile()
         FileOpen(filenum, "misc.dat", OpenMode.Random, OpenAccess.Default, OpenShare.Default, 4)
-        FileGet(filenum, Nstudents, 1)
-        FileGet(filenum, Nstaff, 2)
-        FileGet(filenum, NStudAv, 3)
-        FileGet(filenum, NStaffAv, 4)
-        FileGet(filenum, NAppointment, 5)
-        FileGet(filenum, Nlesson, 6)
-        FileGet(filenum, NDay, 7)
         FileGet(filenum, Appointmentlength, 8)
+        FileClose(filenum)
     End Sub
 
     Public Sub populateStartEndDaySettings()
@@ -526,13 +521,9 @@
     End Function
 
     Public Sub TheSortingAlogorithm()
-<<<<<<< HEAD
-        For counter As Integer = 0 To Nstudents
-            For counter1 As Integer = 0 To Nlesson
-            Next
-=======
         Dim OnAppointment As Integer = 0
         Dim lowerbound As Integer = 0
+
         For counter1 As Integer = 0 To Nstudents
             student = GetStudent(counter1)
 
@@ -544,23 +535,55 @@
                     For counter3 As Integer = 0 To NStudAv
                         StudAv = GetStudAV(counter3)
                         If StudAv.StudNo = student.StudNO And StudAv.available = True Then
-
                             For counter4 As Integer = 0 To NStaffAv
                                 StaffAv = GetStaffAV(counter4)
                                 If StaffAv.StaffNO = Staff.StaffNO And StaffAv.Available = True Then
                                     Appointment.AppointmentNO = OnAppointment
                                     Appointment.studAVNO = StudAv.studAVNO
                                     Appointment.StaffAVNO = StaffAv.staffAVNO
-
+                                    For counter5 As Integer = 0 To NStudAv
+                                        studav2 = GetStudAV(counter5)
+                                        If StudAv.Block = 11 And studav2.Block = 10 Then
+                                            studav2.Block = 0
+                                            studav2.available = False
+                                            PutStudAv(studav2, studav2.studAVNO)
+                                        ElseIf StudAv.Block = 10 And studav2.Block = 11 Then
+                                            studav2.Block = 0
+                                            studav2.available = False
+                                            PutStudAv(studav2, studav2.studAVNO)
+                                        End If
+                                    Next
                                     StaffAv.Available = False
                                     For counter5 As Integer = 0 To NStudAv
+                                        studav2 = GetStudAV(counter5)
+
                                         If Appointmentlength = 5 Then
-                                            lowerbound = (StudAv.Appointment \ 6) * 6
-                                            If StudAv.StudNo = student.StudNO Then
+                                            lowerbound = (studav2.Appointment \ 6) * 6
+                                            If studav2.StudNo = student.StudNO Then
+                                                Select Case studav2.Appointment
+                                                    Case Is <= (lowerbound - 7)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                    Case Is >= (lowerbound + 12)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                    Case (lowerbound - 6) To (lowerbound - 1)
+                                                        studav2.Block = 10
+                                                    Case (lowerbound + 6) To (lowerbound + 11)
+                                                        studav2.Block = 11
+                                                    Case (lowerbound - 1)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                    Case (lowerbound + 1)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                    Case lowerbound
+                                                        studav2.Block = 0
+                                                        studav2.available = False
+                                                End Select
+
 
                                             End If
-                                        Else
-
                                         End If
                                     Next
                                 End If
@@ -571,6 +594,8 @@
             Next
         Next
 
->>>>>>> did algorithm well a lot of it atleats
+
+
+
     End Sub
 End Module
