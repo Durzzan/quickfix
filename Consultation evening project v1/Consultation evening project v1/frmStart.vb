@@ -4,14 +4,42 @@
         'splits up the user data to seperate out the users username
         Dim parts() As String = Split(My.User.Name, "\")
         user = parts(1)
+        Try
+            Nstaff = FileLen("staff.dat") / Len(Staff)
+        Catch
+            Nstaff = 0
+        End Try
+        Try
+            NStaffAv = FileLen("staffav.dat") / Len(StaffAv)
+        Catch
+            NStaffAv = 0
+        End Try
+        Try
+            Nstudents = FileLen("student.dat") / Len(student)
+        Catch
+            Nstudents = 0
+        End Try
+        Try
+            NStudAv = FileLen("studav.dat") / Len(StudAv)
+        Catch
+            NStudAv = 0
+        End Try
+        Try
+            NAppointment = FileLen("appointments.dat") / Len(Appointment)
+        Catch
+            NAppointment = 0
+        End Try
+        Try
+            NDay = FileLen("day.dat") / Len(Day)
+        Catch
+            NDay = 0
+        End Try
+        Try
+            Nlesson = FileLen("lesson.dat") / Len(Lesson)
+        Catch
+            Nlesson = 0
+        End Try
 
-        Nstaff = FileLen("staff.dat") / Len(Staff)
-        NStaffAv = FileLen("staffav.dat") / Len(StaffAv)
-        Nstudents = FileLen("student.dat") / Len(student)
-        NStudAv = FileLen("studav.dat") / Len(StudAv)
-        NAppointment = FileLen("appointments.dat") / Len(Appointment)
-        NDay = FileLen("day.dat") / Len(Day)
-        Nlesson = FileLen("lesson.dat") / Len(Lesson)
 
         'checks if the user is a student or a staff member 
         If Len(user) = 6 Then
