@@ -55,7 +55,7 @@
             Next
         Else
             'user is not in the form of a student so the list of staff is checked
-            For counter = 1 To Nstaff
+            For counter as integer = 1 To Nstaff
                 Staff = GetStaff(counter)
                 'checks if the user has been found
                 If user = Staff.staffID Then
@@ -72,7 +72,9 @@
         End If
         'checks if the system is empty and whether they are a staff member. if so then it will not report there
         'not being in the system to them as an error
-        If FileLen("staff.dat") = 0 And IsNumeric(user) = False Then
+        If FileLen("staff.dat") = 0 And IsNumeric(user) = False and len(user) = 3 Then
+            frmadmin.show
+            me.close
         Else
             If usertype = 0 Then
                 btnAvailability.Visible = False
