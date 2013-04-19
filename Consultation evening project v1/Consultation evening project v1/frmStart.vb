@@ -75,7 +75,7 @@
         If FileLen("staff.dat") = 0 And IsNumeric(user) = False and len(user) = 3 Then
             frmadmin.show
             me.close
-        Else
+        Else If FileLen("staff.dat" = 0 and Len(user) 
             If usertype = 0 Then
                 btnAvailability.Visible = False
                 MsgBox("Your username is not recognised by the system. If this is an error please contact the it technicians.", , "ERROR")
