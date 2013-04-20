@@ -23,7 +23,7 @@ Partial Class frmAvailability
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.lblname = New System.Windows.Forms.Label()
-        Me.chklst = New System.Windows.Forms.CheckedListBox()
+        Me.chklstavailability = New System.Windows.Forms.CheckedListBox()
         Me.SuspendLayout()
         '
         'lblname
@@ -35,20 +35,20 @@ Partial Class frmAvailability
         Me.lblname.TabIndex = 0
         Me.lblname.Text = "Label1"
         '
-        'chklst
+        'chklstavailability
         '
-        Me.chklst.FormattingEnabled = True
-        Me.chklst.Location = New System.Drawing.Point(67, 85)
-        Me.chklst.Name = "chklst"
-        Me.chklst.Size = New System.Drawing.Size(132, 124)
-        Me.chklst.TabIndex = 1
+        Me.chklstavailability.FormattingEnabled = True
+        Me.chklstavailability.Location = New System.Drawing.Point(67, 85)
+        Me.chklstavailability.Name = "chklstavailability"
+        Me.chklstavailability.Size = New System.Drawing.Size(132, 124)
+        Me.chklstavailability.TabIndex = 1
         '
         'frmAvailability
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(340, 334)
-        Me.Controls.Add(Me.chklst)
+        Me.Controls.Add(Me.chklstavailability)
         Me.Controls.Add(Me.lblname)
         Me.Name = "frmAvailability"
         Me.Text = "frmAvailability"
@@ -57,5 +57,5 @@ Partial Class frmAvailability
 
     End Sub
     Friend WithEvents lblname As System.Windows.Forms.Label
-    Friend WithEvents chklst As System.Windows.Forms.CheckedListBox
+    Friend WithEvents chklstavailability As System.Windows.Forms.CheckedListBox
 End Class

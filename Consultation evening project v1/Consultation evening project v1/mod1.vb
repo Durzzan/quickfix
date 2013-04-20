@@ -74,6 +74,7 @@
     'contains the users username
     Public user As String
     Public usertype As Byte = 0
+    Public stopimport As Boolean = False
 
     'student variables
 
@@ -134,8 +135,23 @@
                     OnRec = OnRec + 1
                     'puts data into the studet structure
                     With student
-                        .studNO = CurrentRow(0)
-                        .studID = CurrentRow(1)
+                        If IsNumeric(CurrentRow(0)) = False Then
+                            stopimport = True
+                            MsgBox("error with student.csv")
+                            Exit Sub
+                        End If
+                        If IsNumeric(CurrentRow(1)) = False Then
+                            stopimport = True
+                            MsgBox("error with student.csv")
+                            Exit Sub
+                        End If
+                        If IsNumeric(CurrentRow(4)) = False Then
+                            stopimport = True
+                            MsgBox("error with student.csv")
+                            Exit Sub
+                        End If
+                        .StudNO = CurrentRow(0)
+                        .StudID = CurrentRow(1)
                         .Surname = CurrentRow(2)
                         .Forename = CurrentRow(3)
                         .Year = CurrentRow(4)
@@ -178,6 +194,16 @@
                     OnRec = OnRec + 1
                     'puts data into file structure staff
                     With Staff
+                        If IsNumeric(CurrentRow(0)) = False Then
+                            stopimport = True
+                            MsgBox("error with staff.csv")
+                            Exit Sub
+                        End If
+                        If Len(CurrentRow(2)) <> 3 Then
+                            stopimport = True
+                            MsgBox("error with staff.csv")
+                            Exit Sub
+                        End If
                         .StaffNO = CurrentRow(0)
                         'forename and surname are saved in the same field on the parent file so need to be broken up
                         parts = Split(CurrentRow(1), " ")
@@ -224,6 +250,16 @@
                     OnRec = OnRec + 1
                     'puts data into file structure staff
                     With Lesson
+                        If IsNumeric(CurrentRow(1)) = False Then
+                            stopimport = True
+                            MsgBox("error with studentclass.csv")
+                            Exit Sub
+                        End If
+                        If IsNumeric(CurrentRow(0)) = False Then
+                            stopimport = True
+                            MsgBox("error with studentclass.csv")
+                            Exit Sub
+                        End If
                         .LessonNO = OnRec
                         .StaffNO = CurrentRow(1)
                         .StudNO = CurrentRow(0)
@@ -251,7 +287,7 @@
         TextFileReader.SetDelimiters(",")
 
         Dim lastlesson As Integer = -1
-        Dim currentrow As String()
+        Dim currentrow As String() = Nothing
         Dim onrec As Integer = 0
 
         OnRec = 0
@@ -259,7 +295,17 @@
         While Not TextFileReader.EndOfData
             Try
                 currentrow = TextFileReader.ReadFields()
-                If Not currentrow Is Nothing And currentrow(0) <> lastlesson Then
+                If IsNumeric(currentrow(0)) = False Then
+                    stopimport = True
+                    MsgBox("error with classslots.csv")
+                    Exit Sub
+                End If
+                If IsNumeric(currentrow(3)) = False Then
+                    stopimport = True
+                    MsgBox("error with classslots.csv")
+                    Exit Sub
+                End If
+                If Not currentrow Is Nothing And Not currentrow(0) <> lastlesson.ToString Then
                     onrec = onrec + 1
                     lastlesson = currentrow(0)
                     For counter As Integer = 1 To Nlesson
@@ -469,7 +515,7 @@
         Day = GetDay(frmDaySettings.cmbDay.SelectedItem)
         If Appointmentlength = 5 Then
             'populates cmbstart with 5 min appointments slots
-            For counter As Integer = 0 To (Day.finish - 6) Step 6
+            For counter As Integer = 0 To (Day.finish - 12) Step 6
                 'each slot contained between the beginin and the finsish time is converted into 24hour 
                 'military style time
                 frmDaySettings.cmbStart.Items.Add(militarytime(counter))
@@ -483,7 +529,7 @@
             Next
         Else
             'populates cmbstart with 10 min appointments slots
-            For counter As Integer = 0 To (Day.finish - 6) Step 6
+            For counter As Integer = 0 To (Day.finish - 18) Step 6
                 'each slot contained between the beginin and the finsish time is converted into 24hour 
                 'military style time
                 frmDaySettings.cmbStart.Items.Add(militarytime(counter))

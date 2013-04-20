@@ -26,6 +26,8 @@ Partial Class frmAdmin
         Me.btnImport = New System.Windows.Forms.Button()
         Me.btnDay = New System.Windows.Forms.Button()
         Me.btnBack = New System.Windows.Forms.Button()
+        Me.btnalgorithm = New System.Windows.Forms.Button()
+        Me.btnEmail = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'btnResent
@@ -40,7 +42,7 @@ Partial Class frmAdmin
         'btnImport
         '
         Me.btnImport.Cursor = System.Windows.Forms.Cursors.Default
-        Me.btnImport.Location = New System.Drawing.Point(141, 50)
+        Me.btnImport.Location = New System.Drawing.Point(42, 50)
         Me.btnImport.Name = "btnImport"
         Me.btnImport.Size = New System.Drawing.Size(93, 49)
         Me.btnImport.TabIndex = 1
@@ -49,7 +51,7 @@ Partial Class frmAdmin
         '
         'btnDay
         '
-        Me.btnDay.Location = New System.Drawing.Point(42, 50)
+        Me.btnDay.Location = New System.Drawing.Point(141, 50)
         Me.btnDay.Name = "btnDay"
         Me.btnDay.Size = New System.Drawing.Size(93, 49)
         Me.btnDay.TabIndex = 2
@@ -65,11 +67,31 @@ Partial Class frmAdmin
         Me.btnBack.Text = "Back"
         Me.btnBack.UseVisualStyleBackColor = True
         '
+        'btnalgorithm
+        '
+        Me.btnalgorithm.Location = New System.Drawing.Point(141, 105)
+        Me.btnalgorithm.Name = "btnalgorithm"
+        Me.btnalgorithm.Size = New System.Drawing.Size(93, 49)
+        Me.btnalgorithm.TabIndex = 4
+        Me.btnalgorithm.Text = "generate appointments"
+        Me.btnalgorithm.UseVisualStyleBackColor = True
+        '
+        'btnEmail
+        '
+        Me.btnEmail.Location = New System.Drawing.Point(240, 50)
+        Me.btnEmail.Name = "btnEmail"
+        Me.btnEmail.Size = New System.Drawing.Size(93, 49)
+        Me.btnEmail.TabIndex = 5
+        Me.btnEmail.Text = "Send appointments as emails"
+        Me.btnEmail.UseVisualStyleBackColor = True
+        '
         'frmAdmin
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(403, 295)
+        Me.Controls.Add(Me.btnEmail)
+        Me.Controls.Add(Me.btnalgorithm)
         Me.Controls.Add(Me.btnBack)
         Me.Controls.Add(Me.btnDay)
         Me.Controls.Add(Me.btnImport)
@@ -83,4 +105,6 @@ Partial Class frmAdmin
     Friend WithEvents btnImport As System.Windows.Forms.Button
     Friend WithEvents btnDay As System.Windows.Forms.Button
     Friend WithEvents btnBack As System.Windows.Forms.Button
+    Friend WithEvents btnalgorithm As System.Windows.Forms.Button
+    Friend WithEvents btnEmail As System.Windows.Forms.Button
 End Class

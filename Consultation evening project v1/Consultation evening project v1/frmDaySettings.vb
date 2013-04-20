@@ -11,6 +11,17 @@
             Appointmentlength = 10
         End If
 
+        cmbStart.Items.Clear()
+        cmbEnd.Items.Clear()
+        cmbDay.Items.Clear()
+        For counter As Integer = 1 To NDay
+            Day.DayNO = counter
+            Day.finish = 288
+            Day.Start = 0
+            Putday(Day, Day.DayNO)
+        Next
+
+
         Call secondhalf()
     End Sub
 
@@ -24,6 +35,16 @@
     Private Sub cmbNdays_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbNdays.SelectedIndexChanged
         'records the number of dayz
         NDay = cmbNdays.SelectedItem
+
+        cmbStart.Items.Clear()
+        cmbEnd.Items.Clear()
+        cmbDay.Items.Clear()
+        For counter As Integer = 1 To NDay
+            Day.DayNO = counter
+            Day.finish = 288
+            Day.Start = 0
+            Putday(Day, Day.DayNO)
+        Next
 
         Call secondhalf()
 
@@ -58,6 +79,17 @@
     Private Sub rad10min_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rad10min.CheckedChanged
         'records the new value of appintment length and checks if its ready to start hte second half
         Appointmentlength = 10
+
+        cmbStart.Items.Clear()
+        cmbEnd.Items.Clear()
+        cmbDay.Items.Clear()
+        For counter As Integer = 1 To NDay
+            Day.DayNO = counter
+            Day.finish = 288
+            Day.Start = 0
+            Putday(Day, Day.DayNO)
+        Next
+
         Call secondhalf()
     End Sub
 
