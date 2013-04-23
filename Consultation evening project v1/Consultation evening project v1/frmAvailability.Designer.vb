@@ -24,6 +24,7 @@ Partial Class frmAvailability
     Private Sub InitializeComponent()
         Me.lblname = New System.Windows.Forms.Label()
         Me.chklstavailability = New System.Windows.Forms.CheckedListBox()
+        Me.btnExit = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'lblname
@@ -43,11 +44,21 @@ Partial Class frmAvailability
         Me.chklstavailability.Size = New System.Drawing.Size(132, 124)
         Me.chklstavailability.TabIndex = 1
         '
+        'btnExit
+        '
+        Me.btnExit.Location = New System.Drawing.Point(242, 280)
+        Me.btnExit.Name = "btnExit"
+        Me.btnExit.Size = New System.Drawing.Size(75, 23)
+        Me.btnExit.TabIndex = 2
+        Me.btnExit.Text = "exit"
+        Me.btnExit.UseVisualStyleBackColor = True
+        '
         'frmAvailability
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(340, 334)
+        Me.Controls.Add(Me.btnExit)
         Me.Controls.Add(Me.chklstavailability)
         Me.Controls.Add(Me.lblname)
         Me.Name = "frmAvailability"
@@ -58,4 +69,5 @@ Partial Class frmAvailability
     End Sub
     Friend WithEvents lblname As System.Windows.Forms.Label
     Friend WithEvents chklstavailability As System.Windows.Forms.CheckedListBox
+    Friend WithEvents btnExit As System.Windows.Forms.Button
 End Class

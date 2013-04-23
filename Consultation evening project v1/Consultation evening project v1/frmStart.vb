@@ -1,6 +1,7 @@
 ﻿Public Class frmStart
 
     Private Sub frmStart_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
         'splits up the user data to seperate out the users username
         Dim parts() As String = Split(My.User.Name, "\")
         user = parts(1)
@@ -39,6 +40,8 @@
         Catch
             Nlesson = 0
         End Try
+        user = "sbe"
+        
 
 
         'checks if the user is a student or a staff member 
@@ -55,10 +58,10 @@
             Next
         Else
             'user is not in the form of a student so the list of staff is checked
-            For counter as integer = 1 To Nstaff
+            For counter As Integer = 1 To Nstaff
                 Staff = GetStaff(counter)
                 'checks if the user has been found
-                If user = Staff.staffID Then
+                If user.ToUpper = Staff.staffID.ToUpper Then
                     'records that the user is a member of staff
                     usertype = 2
                     'checks if the user is an admin
@@ -67,15 +70,16 @@
                         btnAvailability.Text = "Your Availability"
                         btnadmin.Visible = True
                     End If
+                    Exit For
                 End If
             Next
         End If
         'checks if the system is empty and whether they are a staff member. if so then it will not report there
         'not being in the system to them as an error
-        If FileLen("staff.dat") = 0 And IsNumeric(user) = False and len(user) = 3 Then
-            frmadmin.show
-            me.close
-        ElseIf FileLen("staff.dat") = 0 And Len(user) Then
+        If FileLen("staff.dat") = 0 And IsNumeric(user) = False And Len(user) = 3 Then
+            frmAdmin.Show()
+            Me.Close()
+        Else
             If usertype = 0 Then
                 btnAvailability.Visible = False
                 MsgBox("Your username is not recognised by the system. If this is an error please contact the it technicians.", , "ERROR")
@@ -88,15 +92,9 @@
     Private Sub btnAvailability_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAvailability.Click
         'checks if the staff files are empty and whether they are a staff member. if yes it will send
         'them to the admin form so they can import data and set the settings
-        If FileLen("Staff.dat") = 0 And IsNumeric(user) = False Then
-            frmAdmin.Show()
-            Me.Hide()
-        Else
             'checks if the user is a student if so it sends them to the student form
-            If usertype = 1 Or usertype = 2 Then
-                frmAvailability.Show()
-                Me.Close()
-            End If
+        If usertype = 1 Or usertype = 2 Then
+            frmAvailability.Show()
         End If
     End Sub
 
