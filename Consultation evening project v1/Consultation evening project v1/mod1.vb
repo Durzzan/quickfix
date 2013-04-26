@@ -547,24 +547,29 @@
         End If
 
     End Sub
-
+    'fucntion that changes a number from 0 to 287 into its coresponidng 24 hour clock time
     Public Function militarytime(ByVal timeNO As Integer) As String
         Dim hours As String
         Dim minuets As String
 
+        'works out how many hours there are
         hours = (timeNO \ 12).ToString
+        'puts in the place filler zeroes to keep it 2 characters
         If Len(hours) = 1 Then
             hours = "0" + hours
         ElseIf Len(hours) = 0 Then
             hours = "00"
         End If
+        'works out how many minuets remain not counting the hours 
         minuets = (timeNO - ((timeNO \ 12) * 12))
         minuets = minuets * 5
+        'puts in the place filling zeroes if need to keep it to 2 characters
         If Len(minuets) = 1 Then
             minuets = "0" + minuets
         ElseIf Len(minuets) = 0 Then
             minuets = "00"
         End If
+        'puts the 2 halves to gether to be returned
         militarytime = hours + minuets
     End Function
 
@@ -587,8 +592,10 @@
                                 StaffAv = GetStaffAV(counter4)
                                 If StaffAv.StaffNO = Staff.StaffNO And StaffAv.Available = True Then
                                     Appointment.AppointmentNO = OnAppointment
-                                    Appointment.studAVNO = StudAv.studAVNO
-                                    Appointment.StaffAVNO = StaffAv.staffAVNO
+                                    Appointment.studNO = StudAv.StudNo
+                                    Appointment.StaffNO = StaffAv.StaffNO
+                                    Appointment.day = StudAv.DayNO
+                                    Appointment.StaffNO = StudAv.Appointment
                                     For counter5 As Integer = 0 To NStudAv
                                         studav2 = GetStudAV(counter5)
                                         If StudAv.Block = 11 And studav2.Block = 10 Then
@@ -657,26 +664,27 @@
 	for counter1 as integer = 1 to nstudents
 		student =getstudent(counter1)
 		body = "Dear " & student.forename & " " & student.surname & vbnewline & vbnewline
-		for counter2 as integer to nappointments
-			if appiontment.studno = student.studno then
-				staff = get(appointment.staffno) 
-				body = body & staff.forename & " " & staff.surname & "" & militarytime(appointment.start) & " day " & appointment.day & vbnewline
-			end if
-		next
+		for counter2 as integer 1 to nAppointment
+                If Appointment.studNO = student.StudNO Then
+                    Staff = GetStaff(Appointment.StaffNO)
+                    body = body & Staff.Forename & " " & Staff.Surname & "" & militarytime(Appointment.start) & " day " & Appointment.day & vbNewLine
+                End If
+            Next
 		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head" 
 	next
 	for counter1 as integer = 1 to nstaff
 		staff = getstaff(counter1)
 		body = "Dear " & staff.forename & " " & staff.surname & vbnewline & vbnewline
-		for counter2 as integer to nappointments
-			if appiontment.staffno = staff.staffno then
-				student = get(appointment.studno)
-				body = body & student.forename & " " & student.surname & "" & militarytime(appointment.start) & " day " & appointment.day & vbnewline
-			end if
-		next
-		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head"	
+		for counter2 as integer to NAppointment
+                If Appointment.StaffNO = Staff.StaffNO Then
+                    student = GetStudent(Appointment.studNO)
+                    body = body & student.Forename & " " & student.Surname & "" & militarytime(Appointment.start) & " day " & Appointment.day & vbNewLine
+                End If
+            Next
+        Next
+        body = body & vbNewLine & "thank you very much" & vbNewLine & "simon bellows" & vbNewLine & vbNewLine & "deputy head"
 	end sub
-	public sub SendEmails(ByVal FromAddress As String, _
+    Public Sub SendEmails2(ByVal FromAddress As String, _
                       ByVal Subject As String, _
                       ByVal Body As String, _
                       ByVal UserName As String, _
@@ -713,5 +721,5 @@
             Email.Dispose()
             Return "Sending Email Failed. Check Port Number."
         End Try
-	end sub
+    End Sub
 End Module

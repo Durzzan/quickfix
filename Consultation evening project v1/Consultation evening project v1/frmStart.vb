@@ -5,42 +5,43 @@
         'splits up the user data to seperate out the users username
         Dim parts() As String = Split(My.User.Name, "\")
         user = parts(1)
+
+        'finds the length of each dat file and if they dont exist sets it to -1
         Try
             Nstaff = FileLen("staff.dat") / Len(Staff)
         Catch
-            Nstaff = 0
+            Nstaff = -1
         End Try
         Try
             NStaffAv = FileLen("staffav.dat") / Len(StaffAv)
         Catch
-            NStaffAv = 0
+            NStaffAv = -1
         End Try
         Try
             Nstudents = FileLen("student.dat") / Len(student)
         Catch
-            Nstudents = 0
+            Nstudents = -1
         End Try
         Try
             NStudAv = FileLen("studav.dat") / Len(StudAv)
         Catch
-            NStudAv = 0
+            NStudAv = -1
         End Try
         Try
             NAppointment = FileLen("appointments.dat") / Len(Appointment)
         Catch
-            NAppointment = 0
+            NAppointment = -1
         End Try
         Try
             NDay = FileLen("day.dat") / Len(Day)
         Catch
-            NDay = 0
+            NDay = -1
         End Try
         Try
             Nlesson = FileLen("lesson.dat") / Len(Lesson)
         Catch
-            Nlesson = 0
+            Nlesson = -1
         End Try
-        user = "sbe"
         
 
 
