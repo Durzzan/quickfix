@@ -54,8 +54,10 @@
     'appointments structure
 
     Public Structure AppointmentsRec
-        Public studAVNO As Byte
-        Public StaffAVNO As Byte
+        Public studNO As integer
+        Public StaffNO As integer
+		public start as integer
+		public day as integer
         Public AppointmentNO As Byte
     End Structure
 
@@ -644,4 +646,64 @@
 
 
     End Sub
+	public sub sendemailspart1()
+	dim subject as string = "Consultation evening appointments"
+	dim body as string = ""
+	dim username as string = "sim.bellows@gmail.com"
+	dim password as string = "l09m3e?!"
+
+	imports system.net.mail
+
+	for counter1 as integer = 1 to nstudents
+		student =getstudent(counter1)
+		body = "Dear " & student.forename & " " & student.surname & vbnewline & vbnewline
+		for counter2 as integer to nappointments
+			if appiontment.studno = student.studno then
+				staff = get(appointment.staffno) 
+				body = body & staff.forename & " " & staff.surname & "" & militarytime(appointment.start) & " day " & appointment.day & vbnewline
+			end if
+		next
+		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head" 
+	next
+	'insert the staff coppy here
+
+	end sub
+	public sub SendEmails(ByVal FromAddress As String, _
+                      ByVal Subject As String, _
+                      ByVal Body As String, _
+                      ByVal UserName As String, _
+                      ByVal Password As String, _
+                      Optional ByVal Server As String = "smtp.gmail.com", _
+                      Optional ByVal Port As Integer = 587, _
+                      Optional ByVal Attachments As List(Of String) = Nothing)
+        Dim Email As New MailMessage()
+        Try
+            Dim SMTPServer As New SmtpClient
+            For Each Attachment As String In Attachments
+                Email.Attachments.Add(New Attachment(Attachment))
+            Next
+            Email.From = New MailAddress(FromAddress)
+            For Each Recipient As String In Recipients
+                Email.To.Add(Recipient)
+            Next
+            Email.Subject = Subject
+            Email.Body = Body
+            SMTPServer.Host = Server
+            SMTPServer.Port = Port
+            SMTPServer.Credentials = New System.Net.NetworkCredential(UserName, Password)
+            SMTPServer.EnableSsl = True
+            SMTPServer.Send(Email)
+            Email.Dispose()
+            Return "Email to " & Recipients(0) & " from " & FromAddress & " was sent."
+        Catch ex As SmtpException
+            Email.Dispose()
+            Return "Sending Email Failed. Smtp Error."
+        Catch ex As ArgumentOutOfRangeException
+            Email.Dispose()
+            Return "Sending Email Failed. Check Port Number."
+        Catch Ex As InvalidOperationException
+            Email.Dispose()
+            Return "Sending Email Failed. Check Port Number."
+        End Try
+	end sub
 End Module
