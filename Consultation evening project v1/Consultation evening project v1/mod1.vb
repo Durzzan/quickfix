@@ -665,8 +665,16 @@
 		next
 		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head" 
 	next
-	'insert the staff coppy here
-
+	for counter1 as integer = 1 to nstaff
+		staff = getstaff(counter1)
+		body = "Dear " & staff.forename & " " & staff.surname & vbnewline & vbnewline
+		for counter2 as integer to nappointments
+			if appiontment.staffno = staff.staffno then
+				student = get(appointment.studno)
+				body = body & student.forename & " " & student.surname & "" & militarytime(appointment.start) & " day " & appointment.day & vbnewline
+			end if
+		next
+		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head"	
 	end sub
 	public sub SendEmails(ByVal FromAddress As String, _
                       ByVal Subject As String, _
