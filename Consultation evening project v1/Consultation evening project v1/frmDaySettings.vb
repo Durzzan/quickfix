@@ -11,9 +11,11 @@
             Appointmentlength = 10
         End If
 
+        'clears the secondary comboboxes
         cmbStart.Items.Clear()
         cmbEnd.Items.Clear()
         cmbDay.Items.Clear()
+        'resets the day settings
         For counter As Integer = 1 To NDay
             Day.DayNO = counter
             Day.finish = 288
@@ -21,7 +23,7 @@
             Putday(Day, Day.DayNO)
         Next
 
-
+        'calls the subroutine second half which decided weather to complete the other repacutions of changing the appointment length
         Call secondhalf()
     End Sub
 
@@ -36,16 +38,18 @@
         'records the number of dayz
         NDay = cmbNdays.SelectedItem
 
+        'clears the secondary comboboxes
         cmbStart.Items.Clear()
         cmbEnd.Items.Clear()
         cmbDay.Items.Clear()
+        'resets the day settings
         For counter As Integer = 1 To NDay
             Day.DayNO = counter
             Day.finish = 288
             Day.Start = 0
             Putday(Day, Day.DayNO)
         Next
-
+        'calls the subroutine second half which decided weather to complete the other repacutions of changing the number of days
         Call secondhalf()
 
 
@@ -80,39 +84,49 @@
         'records the new value of appintment length and checks if its ready to start hte second half
         Appointmentlength = 10
 
+        'clears the secondary comboboxes
         cmbStart.Items.Clear()
         cmbEnd.Items.Clear()
         cmbDay.Items.Clear()
+        'resets the day settings
         For counter As Integer = 1 To NDay
             Day.DayNO = counter
             Day.finish = 288
             Day.Start = 0
             Putday(Day, Day.DayNO)
         Next
-
+        'calls the subroutine second half which decided weather to complete the other repacutions of changing the appointment length
         Call secondhalf()
     End Sub
 
     Private Sub cmbDay_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbDay.SelectedIndexChanged
+        'calls the subrootine that will populate cmbstart and cmbend
         Call populateStartEndDaySettings()
     End Sub
 
     Private Sub cmbStart_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbStart.SelectedIndexChanged
         Dim hours As Integer = (cmbStart.SelectedItem) \ 100
         Dim minuets As Integer = ((cmbStart.SelectedItem) - (((cmbStart.SelectedItem) \ 100) * 100)) / 5
+
+        'eliminates any accidental loops
         If change = True Then
             change = False
             Exit Sub
         End If
+        'sets the start time for the day selected
         Day.Start = (hours * 12) + minuets
         Day.DayNO = cmbDay.SelectedItem
         Putday(Day, Day.DayNO)
+        'clears the cmbstart andc cmbend
         cmbEnd.Items.Clear()
         cmbStart.Items.Clear()
+        'calls the subroutine to populate cmbstart and cmbend
         Call populateStartEndDaySettings()
         change = True
+        'selects the start time in cmbstart
         cmbStart.SelectedIndex = Day.Start / 6
         change1 = True
+        'selects the end time in cmbend
         If Appointmentlength = 5 Then
             cmbEnd.SelectedIndex = (Day.finish - Day.Start) \ 6 - 2
         Else
@@ -121,25 +135,32 @@
     End Sub
 
     Private Sub btnBack_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBack.Click
+        'closes the form
         Me.Close()
     End Sub
 
     Private Sub cmbEnd_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbEnd.SelectedIndexChanged
         Dim hours As Integer = (cmbEnd.SelectedItem) \ 100
         Dim minuets As Integer = ((cmbEnd.SelectedItem) - (((cmbEnd.SelectedItem) \ 100) * 100)) / 5
+        'eliminates accidental loops
         If change1 = True Then
             change1 = False
             Exit Sub
         End If
+        'sets the end time for the day selected
         Day.finish = (hours * 12) + minuets
         Day.DayNO = cmbDay.SelectedItem
         Putday(Day, Day.DayNO)
+        'clears cmbend and cmbstart
         cmbEnd.Items.Clear()
         cmbStart.Items.Clear()
+        'calls the subroutine to populate cmbstart and cmbend
         Call populateStartEndDaySettings()
         change = True
+        'selscts the start time in cmbstart
         cmbStart.SelectedIndex = Day.Start / 6
         change1 = True
+        'selects the end time in cmbend
         If Appointmentlength = 5 Then
             cmbEnd.SelectedIndex = (Day.finish - Day.Start) \ 6 - 2
         Else

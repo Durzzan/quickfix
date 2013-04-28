@@ -577,32 +577,38 @@
         Dim OnAppointment As Integer = 0
         Dim lowerbound As Integer = 0
 
+        'for loop goes through every student
         For counter1 As Integer = 0 To Nstudents
+            'gets studnet information
             student = GetStudent(counter1)
-
+            'finds all the lessons with the student and retives the teacher
             For counter2 As Integer = 0 To Nlesson
                 Lesson = Getlesson(counter2)
                 If Lesson.StudNO = student.StudNO Then
                     Staff = GetStaff(counter2)
-
+                    'for each students availablity it looks for avaliable spots that are also available for the teacher
                     For counter3 As Integer = 0 To NStudAv
                         StudAv = GetStudAV(counter3)
                         If StudAv.StudNo = student.StudNO And StudAv.available = True Then
                             For counter4 As Integer = 0 To NStaffAv
                                 StaffAv = GetStaffAV(counter4)
                                 If StaffAv.StaffNO = Staff.StaffNO And StaffAv.Available = True Then
+                                    'an appointment slot has been found for which both the studen and staff memver are available for
+                                    'the record for the appointment is populated
                                     Appointment.AppointmentNO = OnAppointment
                                     Appointment.studNO = StudAv.StudNo
                                     Appointment.StaffNO = StaffAv.StaffNO
                                     Appointment.day = StudAv.DayNO
                                     Appointment.StaffNO = StudAv.Appointment
+                                    'handels block values for the student so as to make sure that the other appointmetns that the studnet gets are only
+                                    'going to be 5 minuets the other side and with in the block
                                     For counter5 As Integer = 0 To NStudAv
                                         studav2 = GetStudAV(counter5)
-                                        If StudAv.Block = 11 And studav2.Block = 10 Then
+                                        If StudAv.Block = 21 And studav2.Block = 20 Then
                                             studav2.Block = 0
                                             studav2.available = False
                                             PutStudAv(studav2, studav2.studAVNO)
-                                        ElseIf StudAv.Block = 10 And studav2.Block = 11 Then
+                                        ElseIf StudAv.Block = 20 And studav2.Block = 21 Then
                                             studav2.Block = 0
                                             studav2.available = False
                                             PutStudAv(studav2, studav2.studAVNO)
@@ -693,6 +699,7 @@
                       Optional ByVal Port As Integer = 587, _
                       Optional ByVal Attachments As List(Of String) = Nothing)
         Dim Email As New MailMessage()
+
         Try
             Dim SMTPServer As New SmtpClient
             For Each Attachment As String In Attachments

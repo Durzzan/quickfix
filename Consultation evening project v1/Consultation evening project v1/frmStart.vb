@@ -75,25 +75,28 @@
                 End If
             Next
         End If
-        'checks if the system is empty and whether they are a staff member. if so then it will not report there
-        'not being in the system to them as an error
+        'checks if the system doesnt have any staff. if so then there arnt any admins and it checks if the user is in the format of a staff member
+        'if so then it sends the user to the admin file to set up the system
+
         If FileLen("staff.dat") = 0 And IsNumeric(user) = False And Len(user) = 3 Then
             frmAdmin.Show()
             Me.Close()
-        Else
-            If usertype = 0 Then
-                btnAvailability.Visible = False
-                MsgBox("Your username is not recognised by the system. If this is an error please contact the it technicians.", , "ERROR")
-
-            End If
         End If
+
+        'if the usesr has been given a usertype of 0 then he is not in the system so access to the other forms is blocked of by making the buttons
+        'invisible and it then sends an error message sayting they arent in the system and advising them to check with an admisistrator if they
+        'feel it is wrong
+        If usertype = 0 Then
+            btnAvailability.Visible = False
+            MsgBox("Your username is not recognised by the system. If this is an error please contact the it technicians.", , "ERROR")
+
+        End If
+
 
     End Sub
 
     Private Sub btnAvailability_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAvailability.Click
-        'checks if the staff files are empty and whether they are a staff member. if yes it will send
-        'them to the admin form so they can import data and set the settings
-            'checks if the user is a student if so it sends them to the student form
+        'though the button should only be vissible if hte user is in the system if first checks if they are tne sends them to the availablility form
         If usertype = 1 Or usertype = 2 Then
             frmAvailability.Show()
         End If
