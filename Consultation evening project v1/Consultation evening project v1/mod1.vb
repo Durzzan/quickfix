@@ -307,7 +307,7 @@
                     MsgBox("error with classslots.csv")
                     Exit Sub
                 End If
-                If Not currentrow Is Nothing And Not currentrow(0) <> lastlesson.ToString Then
+                If (Not currentrow Is Nothing) And (currentrow(0) <> lastlesson.ToString) Then
                     onrec = onrec + 1
                     lastlesson = currentrow(0)
                     For counter As Integer = 1 To Nlesson
@@ -600,50 +600,140 @@
                                     Appointment.StaffNO = StaffAv.StaffNO
                                     Appointment.day = StudAv.DayNO
                                     Appointment.StaffNO = StudAv.Appointment
-                                    'handels block values for the student so as to make sure that the other appointmetns that the studnet gets are only
-                                    'going to be 5 minuets the other side and with in the block
-                                    For counter5 As Integer = 0 To NStudAv
-                                        studav2 = GetStudAV(counter5)
-                                        If StudAv.Block = 21 And studav2.Block = 20 Then
-                                            studav2.Block = 0
-                                            studav2.available = False
-                                            PutStudAv(studav2, studav2.studAVNO)
-                                        ElseIf StudAv.Block = 20 And studav2.Block = 21 Then
-                                            studav2.Block = 0
-                                            studav2.available = False
-                                            PutStudAv(studav2, studav2.studAVNO)
-                                        End If
-                                    Next
-                                    StaffAv.Available = False
-                                    For counter5 As Integer = 0 To NStudAv
-                                        studav2 = GetStudAV(counter5)
+                                    'handels block values for the student so as to make sure that the values are only within one block.
+                                    If Appointmentlength = 5 Then
+                                        For counter5 As Integer = 0 To NStudAv
+                                            studav2 = GetStudAV(counter5)
+                                            'checks if teh block value of the current spot is 21 because if it is and the other is 20 then they are
+                                            'not in the same block and it needs to be set as unavailable
+                                            If StudAv.Block = 21 And studav2.Block = 20 Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                                'checks if teh block value of the current spot is 20 because if it is and the other is 21 then they are
+                                                'not in the same block and it needs to be set as unavailable
+                                            ElseIf StudAv.Block = 20 And studav2.Block = 21 Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                            End If
+                                        Next
 
+                                    Else
+                                        'handles 10 min cases
+                                        For counter5 As Integer = 0 To NStudAv
+                                            studav2 = GetStudAV(counter5)
+                                            'checks if teh block value of the current spot is 20 because if it is and the other is 22 or 23 then they are
+                                            'not in the same block and it needs to be set as unavailable
+                                            If StudAv.Block = 20 And (studav2.Block = 22 Or studav2.Block = 23) Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                                'checks if teh block value of the current spot is 21 because if it is and the other is 23 then they are
+                                                'not in the same block and it needs to be set as unavailable
+                                            ElseIf StudAv.Block = 21 And studav2.Block = 23 Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                                'checks if teh block value of the current spot is 23 because if it is and the other is 20 or 21 then they are
+                                                'not in the same block and it needs to be set as unavailable
+                                            ElseIf StudAv.Block = 23 And (studav2.Block = 20 Or studav2.Block = 21) Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                                'checks if teh block value of the current spot is 22 because if it is and the other is 20 then they are
+                                                'not in the same block and it needs to be set as unavailable
+                                            ElseIf StudAv.Block = 22 And studav2.Block = 20 Then
+                                                studav2.Block = 0
+                                                studav2.available = False
+                                                PutStudAv(studav2, studav2.studAVNO)
+                                            End If
+                                        Next
+                                    End If
+                                    'sets the staffav availablitity
+                                    StaffAv.Available = False
+                                    PutStaffAv(StaffAv, StaffAv.staffAVNO)
+
+                                    'sets the stud blocks and availablitity for appointment blocks 
+                                    'cycles through each studavrecord
+                                    For counter5 As Integer = 0 To NStudAv
+                                        studav2 = GetStudAV(counter5)
+                                        'for appointmetn length 5
                                         If Appointmentlength = 5 Then
+                                            'works out the first appointment of the half hour
                                             lowerbound = (studav2.Appointment \ 6) * 6
-                                            If studav2.StudNo = student.StudNO Then
+                                            'checks if the studav is not already been set in the earlier check and if it is for the right student 
+                                            If studav2.StudNo = student.StudNO And StudAv.Block <> 21 Or 20 Then
                                                 Select Case studav2.Appointment
+                                                    'too early
                                                     Case Is <= (lowerbound - 7)
                                                         studav2.available = False
                                                         studav2.Block = 0
+                                                        'too late
                                                     Case Is >= (lowerbound + 12)
                                                         studav2.available = False
                                                         studav2.Block = 0
+                                                        'half hour early
                                                     Case (lowerbound - 6) To (lowerbound - 1)
-                                                        studav2.Block = 10
+                                                        studav2.Block = 20
+                                                        'half hour later
                                                     Case (lowerbound + 6) To (lowerbound + 11)
-                                                        studav2.Block = 11
-                                                    Case (lowerbound - 1)
+                                                        studav2.Block = 21
+                                                        'appointmetn before
+                                                    Case (StudAv.Appointment - 1)
                                                         studav2.available = False
                                                         studav2.Block = 0
-                                                    Case (lowerbound + 1)
+                                                        'appointment after
+                                                    Case (StudAv.Appointment + 1)
                                                         studav2.available = False
                                                         studav2.Block = 0
-                                                    Case lowerbound
+                                                        'the appointmetn in question
+                                                    Case StudAv.Appointment
                                                         studav2.Block = 0
                                                         studav2.available = False
                                                 End Select
 
 
+                                            End If
+                                        Else
+                                            'works out the first appointment of the half hour
+                                            lowerbound = (studav2.Appointment \ 6) * 6
+                                            'checks if the studav is not already been set in the earlier check and if it is for the right student 
+                                            If studav2.StudNo = student.StudNO And StudAv.Block <> 21 Or 20 Then
+                                                Select Case studav2.Appointment
+                                                    'too early
+                                                    Case Is <= (lowerbound - 13)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                        'too late
+                                                    Case Is >= (lowerbound + 18)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                        'half hour early
+                                                    Case (lowerbound - 6) To (lowerbound - 1)
+                                                        studav2.Block = 21
+                                                        'half hour later
+                                                    Case (lowerbound + 6) To (lowerbound + 11)
+                                                        studav2.Block = 22
+                                                        'hour early
+                                                    Case (lowerbound - 12) To (lowerbound - 7)
+                                                        studav2.Block = 20
+                                                        'hour later
+                                                    Case (lowerbound + 12) To (lowerbound + 17)
+                                                        studav2.Block = 23
+                                                        'appointmetn before
+                                                    Case (StudAv.Appointment - 1)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                        'appointment after
+                                                    Case (StudAv.Appointment + 1)
+                                                        studav2.available = False
+                                                        studav2.Block = 0
+                                                        'the appointmetn in question
+                                                    Case StudAv.Appointment
+                                                        studav2.Block = 0
+                                                        studav2.available = False
+                                                End Select
                                             End If
                                         End If
                                     Next
@@ -660,73 +750,102 @@
 
     End Sub
 	public sub sendemailspart1()
-	dim subject as string = "Consultation evening appointments"
-	dim body as string = ""
-	dim username as string = "sim.bellows@gmail.com"
-	dim password as string = "l09m3e?!"
+        Dim subject As String = "Consultation evening appointments"
+        Dim body As String = ""
+        Dim username As String = "sim.bellows@gmail.com"
+        Dim password As String = "l09m3e?!"
+        Dim recipient As String
 
-	imports system.net.mail
 
-	for counter1 as integer = 1 to nstudents
-		student =getstudent(counter1)
-		body = "Dear " & student.forename & " " & student.surname & vbnewline & vbnewline
-		for counter2 as integer 1 to nAppointment
+        'loop that cycles through each student so each gets an email
+        For counter1 As Integer = 1 To Nstudents
+            'loads current students details
+            student = GetStudent(counter1)
+            'generates the students school email
+            recipient = student.StudID + "@WMSF.ac.uk"
+            'puts the initial greeting for the email and clears the old message
+            body = "Dear " & student.Forename & " " & student.Surname & vbNewLine & vbNewLine
+            'finds each appointment of the student
+            For counter2 As Integer = 1 To NAppointment
                 If Appointment.studNO = student.StudNO Then
+                    'gets the name of the member of staff the appointment is with
                     Staff = GetStaff(Appointment.StaffNO)
+                    'puts in the details of the appiontment into the email
                     body = body & Staff.Forename & " " & Staff.Surname & "" & militarytime(Appointment.start) & " day " & Appointment.day & vbNewLine
                 End If
             Next
-		body = body & vbnewline & "thank you very much" & vbnewline & "simon bellows" & vbnewline & vbnewline & "deputy head" 
-	next
-	for counter1 as integer = 1 to nstaff
-		staff = getstaff(counter1)
-		body = "Dear " & staff.forename & " " & staff.surname & vbnewline & vbnewline
-		for counter2 as integer to NAppointment
+            'puts the sign off of the email into the text
+            body = body & vbNewLine & "thank you very much" & vbNewLine & "simon bellows" & vbNewLine & vbNewLine & "deputy head"
+            'calls the routine to send the email
+            Call SendEmails2("sim.bellows@gmail.com", subject, body, username, password, recipient)
+        Next
+        'loop that cycles through each staff member so each gets an email
+        For counter1 As Integer = 1 To Nstaff
+            'loads current staff members details
+            Staff = GetStaff(counter1)
+            'genereates the staff school email
+            recipient = Staff.staffID + "@WMSF.ac.uk"
+            'puts the intitial greeting for the email and clears the old message
+            body = "Dear " & Staff.Forename & " " & Staff.Surname & vbNewLine & vbNewLine
+            'finds each appoointment of the staff member
+            For counter2 As Integer = 1 To NAppointment
                 If Appointment.StaffNO = Staff.StaffNO Then
+                    'gets the name of the student the appointmetn is with
                     student = GetStudent(Appointment.studNO)
+                    'puts in the details of the appointment into the email
                     body = body & student.Forename & " " & student.Surname & "" & militarytime(Appointment.start) & " day " & Appointment.day & vbNewLine
                 End If
             Next
+            'puts the sign off of the email into the message
+            body = body & vbNewLine & "thank you very much" & vbNewLine & "simon bellows" & vbNewLine & vbNewLine & "deputy head"
+            'calls the routine to send the email
+            Call SendEmails2("sim.bellows@gmail.com", subject, body, username, password, recipient)
         Next
-        body = body & vbNewLine & "thank you very much" & vbNewLine & "simon bellows" & vbNewLine & vbNewLine & "deputy head"
+        
 	end sub
     Public Sub SendEmails2(ByVal FromAddress As String, _
-                      ByVal Subject As String, _
-                      ByVal Body As String, _
-                      ByVal UserName As String, _
-                      ByVal Password As String, _
-                      Optional ByVal Server As String = "smtp.gmail.com", _
-                      Optional ByVal Port As Integer = 587, _
-                      Optional ByVal Attachments As List(Of String) = Nothing)
-        Dim Email As New MailMessage()
+                     ByVal Subject As String, _
+                        ByVal Body As String, _
+                          ByVal UserName As String, _
+                          ByVal Password As String, _
+                          ByVal recipient As String, _
+                          Optional ByVal Server As String = "smtp.gmail.com", _
+                          Optional ByVal Port As Integer = 587)
 
-        Try
-            Dim SMTPServer As New SmtpClient
-            For Each Attachment As String In Attachments
-                Email.Attachments.Add(New Attachment(Attachment))
-            Next
-            Email.From = New MailAddress(FromAddress)
-            For Each Recipient As String In Recipients
-                Email.To.Add(Recipient)
-            Next
-            Email.Subject = Subject
-            Email.Body = Body
-            SMTPServer.Host = Server
-            SMTPServer.Port = Port
-            SMTPServer.Credentials = New System.Net.NetworkCredential(UserName, Password)
-            SMTPServer.EnableSsl = True
-            SMTPServer.Send(Email)
-            Email.Dispose()
-            Return "Email to " & Recipients(0) & " from " & FromAddress & " was sent."
-        Catch ex As SmtpException
-            Email.Dispose()
-            Return "Sending Email Failed. Smtp Error."
-        Catch ex As ArgumentOutOfRangeException
-            Email.Dispose()
-            Return "Sending Email Failed. Check Port Number."
-        Catch Ex As InvalidOperationException
-            Email.Dispose()
-            Return "Sending Email Failed. Check Port Number."
-        End Try
+        '    Dim Email As New MailMessage()
+
+        '    'trys to send the email
+        '    Try
+        '        Dim SMTPServer As New SmtpClient
+        '        'fills in the senders email adress from the fromaddress parameter
+        '        Email.From = New MailAddress(FromAddress)
+        '        'puts in the recipent for the mail
+        '        For Each Recipient As String In Recipients
+        '            Email.To.Add(Recipient)
+        '        Next
+        '        'adds subject body and server, host and such information
+        '        Email.Subject = Subject
+        '        Email.Body = Body
+        '        SMTPServer.Host = Server
+        '        SMTPServer.Port = Port
+        '        SMTPServer.Credentials = New System.Net.NetworkCredential(UserName, Password)
+        '        SMTPServer.EnableSsl = True
+        '        'sends it
+        '        SMTPServer.Send(Email)
+        '        'clears it
+        '        Email.Dispose()
+        '        'notificaltion if smtp failed
+        '    Catch ex As SmtpException
+        '        Email.Dispose()
+        '        MsgBox("Sending Email Failed. Smtp Error.")
+        '        'notification if portnuimber owas wrong
+        '    Catch ex As ArgumentOutOfRangeException
+        '        Email.Dispose()
+        '        MsgBox("Sending Email Failed. Check Port Number.")
+        '        'notification if portnunber is wrong
+        '    Catch Ex As InvalidOperationException
+        '        Email.Dispose()
+        '        MsgBox("Sending Email Failed. Check Port Number.")
+        '    End Try
     End Sub
 End Module
