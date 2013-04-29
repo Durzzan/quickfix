@@ -503,17 +503,9 @@
         'closes the appointment dat file
         FileClose(Filenum)
     End Sub
-    Public Sub ImportMisc()
-        'import misc.dat data
-        Dim filenum As Integer = FreeFile()
-        FileOpen(filenum, "misc.dat", OpenMode.Random, OpenAccess.Default, OpenShare.Default, 4)
-        FileGet(filenum, Appointmentlength, 8)
-        FileClose(filenum)
-    End Sub
 
     Public Sub populateStartEndDaySettings()
         'populates cmbstart with the times at the required appiontment length apart
-        Dim ampm As String = ""
         Day = GetDay(frmDaySettings.cmbDay.SelectedItem)
         If Appointmentlength = 5 Then
             'populates cmbstart with 5 min appointments slots
