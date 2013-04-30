@@ -793,40 +793,40 @@
                           Optional ByVal Server As String = "smtp.gmail.com", _
                           Optional ByVal Port As Integer = 587)
 
-        '    Dim Email As New MailMessage()
+        Dim Email As New MailMessage()
 
-        '    'trys to send the email
-        '    Try
-        '        Dim SMTPServer As New SmtpClient
-        '        'fills in the senders email adress from the fromaddress parameter
-        '        Email.From = New MailAddress(FromAddress)
-        '        'puts in the recipent for the mail
-        '        For Each Recipient As String In Recipients
-        '            Email.To.Add(Recipient)
-        '        Next
-        '        'adds subject body and server, host and such information
-        '        Email.Subject = Subject
-        '        Email.Body = Body
-        '        SMTPServer.Host = Server
-        '        SMTPServer.Port = Port
-        '        SMTPServer.Credentials = New System.Net.NetworkCredential(UserName, Password)
-        '        SMTPServer.EnableSsl = True
-        '        'sends it
-        '        SMTPServer.Send(Email)
-        '        'clears it
-        '        Email.Dispose()
-        '        'notificaltion if smtp failed
-        '    Catch ex As SmtpException
-        '        Email.Dispose()
-        '        MsgBox("Sending Email Failed. Smtp Error.")
-        '        'notification if portnuimber owas wrong
-        '    Catch ex As ArgumentOutOfRangeException
-        '        Email.Dispose()
-        '        MsgBox("Sending Email Failed. Check Port Number.")
-        '        'notification if portnunber is wrong
-        '    Catch Ex As InvalidOperationException
-        '        Email.Dispose()
-        '        MsgBox("Sending Email Failed. Check Port Number.")
-        '    End Try
+        'trys to send the email
+        Try
+            Dim SMTPServer As New SmtpClient
+            'fills in the senders email adress from the fromaddress parameter
+            Email.From = New MailAddress(FromAddress)
+            'puts in the recipent for the mail
+            For Each Recipient As String In Recipients
+                Email.To.Add(Recipient)
+            Next
+            'adds subject body and server, host and such information
+            Email.Subject = Subject
+            Email.Body = Body
+            SMTPServer.Host = Server
+            SMTPServer.Port = Port
+            SMTPServer.Credentials = New System.Net.NetworkCredential(UserName, Password)
+            SMTPServer.EnableSsl = True
+            'sends it
+            SMTPServer.Send(Email)
+            'clears it
+            Email.Dispose()
+            'notificaltion if smtp failed
+        Catch ex As SmtpException
+            Email.Dispose()
+            MsgBox("Sending Email Failed. Smtp Error.")
+            'notification if portnuimber owas wrong
+        Catch ex As ArgumentOutOfRangeException
+            Email.Dispose()
+            MsgBox("Sending Email Failed. Check Port Number.")
+            'notification if portnunber is wrong
+        Catch Ex As InvalidOperationException
+            Email.Dispose()
+            MsgBox("Sending Email Failed. Check Port Number.")
+        End Try
     End Sub
 End Module
