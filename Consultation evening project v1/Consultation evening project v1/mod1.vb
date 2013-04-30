@@ -137,26 +137,21 @@
                     OnRec = OnRec + 1
                     'puts data into the studet structure
                     With student
-                        If IsNumeric(CurrentRow(0)) = False Then
+                        Try
+                            
+                            .StudNO = CurrentRow(0)
+                            .StudID = CurrentRow(1)
+                            .Surname = CurrentRow(2)
+                            .Forename = CurrentRow(3)
+                            .Year = CurrentRow(4)
+                        Catch
+                            'this is trigered if there was a problem with inputing to the student structure
+                            'it stops the importing and telles the suer what has happened
                             stopimport = True
                             MsgBox("error with student.csv")
                             Exit Sub
-                        End If
-                        If IsNumeric(CurrentRow(1)) = False Then
-                            stopimport = True
-                            MsgBox("error with student.csv")
-                            Exit Sub
-                        End If
-                        If IsNumeric(CurrentRow(4)) = False Then
-                            stopimport = True
-                            MsgBox("error with student.csv")
-                            Exit Sub
-                        End If
-                        .StudNO = CurrentRow(0)
-                        .StudID = CurrentRow(1)
-                        .Surname = CurrentRow(2)
-                        .Forename = CurrentRow(3)
-                        .Year = CurrentRow(4)
+                        End Try
+
                     End With
                     'puts data from the student structure into the student dat file
                     FilePut(FileNum, student, OnRec)
@@ -196,26 +191,24 @@
                     OnRec = OnRec + 1
                     'puts data into file structure staff
                     With Staff
-                        If IsNumeric(CurrentRow(0)) = False Then
+                        Try
+                            .StaffNO = CurrentRow(0)
+                            'forename and surname are saved in the same field on the parent file so need to be broken up
+                            parts = Split(CurrentRow(1), " ")
+                            .Surname = parts(1)
+                            .Forename = parts(0)
+                            .staffID = CurrentRow(2)
+                            If CurrentRow(3) = 0 Then
+                                .admin = False
+                            Else : .admin = True
+                            End If
+                        Catch
+                            'this is trigered if there was a problem with inputing to the staff structure
+                            'it stops the importing and telles the suer what has happened
                             stopimport = True
                             MsgBox("error with staff.csv")
                             Exit Sub
-                        End If
-                        If Len(CurrentRow(2)) <> 3 Then
-                            stopimport = True
-                            MsgBox("error with staff.csv")
-                            Exit Sub
-                        End If
-                        .StaffNO = CurrentRow(0)
-                        'forename and surname are saved in the same field on the parent file so need to be broken up
-                        parts = Split(CurrentRow(1), " ")
-                        .Surname = parts(1)
-                        .Forename = parts(0)
-                        .staffID = CurrentRow(2)
-                        If CurrentRow(3) = 0 Then
-                            .admin = False
-                        Else : .admin = True
-                        End If
+                        End Try
                     End With
                     'puts data in file structure staff into the staff dat file
                     FilePut(FileNum, Staff, OnRec)
@@ -252,19 +245,17 @@
                     OnRec = OnRec + 1
                     'puts data into file structure staff
                     With Lesson
-                        If IsNumeric(CurrentRow(1)) = False Then
+                        Try
+                            .LessonNO = OnRec
+                            .StaffNO = CurrentRow(1)
+                            .StudNO = CurrentRow(0)
+                        Catch
+                            'this is trigered if there was a problem with inputing to the lesson structure
+                            'it stops the importing and telles the suer what has happened
                             stopimport = True
                             MsgBox("error with studentclass.csv")
                             Exit Sub
-                        End If
-                        If IsNumeric(CurrentRow(0)) = False Then
-                            stopimport = True
-                            MsgBox("error with studentclass.csv")
-                            Exit Sub
-                        End If
-                        .LessonNO = OnRec
-                        .StaffNO = CurrentRow(1)
-                        .StudNO = CurrentRow(0)
+                        End Try
                     End With
                     'puts data in the lesson file structure into the lesson dat file
                     FilePut(FileNum, Lesson, OnRec)
@@ -297,24 +288,22 @@
         While Not TextFileReader.EndOfData
             Try
                 currentrow = TextFileReader.ReadFields()
-                If IsNumeric(currentrow(0)) = False Then
-                    stopimport = True
-                    MsgBox("error with classslots.csv")
-                    Exit Sub
-                End If
-                If IsNumeric(currentrow(3)) = False Then
-                    stopimport = True
-                    MsgBox("error with classslots.csv")
-                    Exit Sub
-                End If
                 If (Not currentrow Is Nothing) And (currentrow(0) <> lastlesson.ToString) Then
                     onrec = onrec + 1
                     lastlesson = currentrow(0)
                     For counter As Integer = 1 To Nlesson
                         Getlesson(counter)
-                        If Lesson.StaffNO = currentrow(0) Then
-                            Lesson.StaffNO = currentrow(3)
-                        End If
+                        Try
+                            If Lesson.StaffNO = currentrow(0) Then
+                                Lesson.StaffNO = currentrow(3)
+                            End If
+                        Catch
+                            'this is trigered if there was a problem with inputing to the lesson structure
+                            'it stops the importing and telles the suer what has happened
+                            stopimport = True
+                            MsgBox("error with classslots.csv")
+                            Exit Sub
+                        End Try
                         Putlesson(Lesson, Lesson.LessonNO)
                     Next
                 End If
